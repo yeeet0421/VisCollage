@@ -282,7 +282,7 @@ function bar_options(element,data,canvas_id,chart_id,chart_datas){
         },
         multiYAxes:dual_yAxes
     }
-   
+    // console.log(options)
     ////////////////// revised 2020.01 //////////////////
     //show second y-axes if there are two dataset
     var temp = Object.assign({},options.scales.yAxes);

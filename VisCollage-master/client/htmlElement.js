@@ -461,10 +461,12 @@ function titleDiv(chart_data){
                 title_name += month_abbrev[parseInt(labels[i])]
             }
             else if(labels[i-1] == "user_level"){
-                title_name += TR_userlevel[labels[i]]
+                title_name += labels[i]
             }
-            else title_name += labels[i]
-            
+            else {
+                title_name += labels[i]
+            }
+            // console.log(labels[i])
             if(i<labels.length-1)   title_name += ", "
         }
     }

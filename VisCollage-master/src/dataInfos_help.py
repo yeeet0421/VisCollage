@@ -34,7 +34,8 @@ dataInfos = {
     },
     'Transaction': {
         # 'readFilePath' : '../data/Transaction/transaction_CH.json', # Chinese
-        'readFilePath': '../data/Transaction/transaction_EN.json',  # English
+        # 'readFilePath': '../data/Transaction/transaction_EN.json',  # English
+        'readFilePath': '../data/Transaction/transaction_EN_level_changed.json',  # English
         'data': {},
         'enumerateVizs': [],
         'rootVizs': [],

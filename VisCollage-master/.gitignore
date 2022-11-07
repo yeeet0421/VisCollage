@@ -1,0 +1,10 @@
+data/
+result analysis/*.xlsx
+result analysis/*.csv
+src/result/
+src/bitmap_canvas/
+src/model/user
+src/users_logs
+src/TR_data
+src/__pycache__
+src/.ipynb_checkpoints

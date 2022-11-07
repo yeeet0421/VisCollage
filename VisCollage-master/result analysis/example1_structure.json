@@ -1,0 +1,22 @@
+{
+    "#a_chart_1": [
+        "#a_chart_2"
+    ],
+    "#a_chart_2": [
+        "#a_chart_5"
+    ],
+    "#a_chart_3": [
+        "#a_chart_4"
+    ],
+    "#a_chart_4": [
+        "#a_chart_6"
+    ],
+    "#a_chart_5": [
+        "#a_chart_7"
+    ],
+    "#a_chart_6": [
+        "#a_chart_8"
+    ],
+    "#a_chart_7": [],
+    "#a_chart_8": []
+}

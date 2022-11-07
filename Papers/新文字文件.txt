@@ -1,0 +1,97 @@
+● SeqGAN Sequence Generative Adversarial Nets with Policy Gradient
+
+*Applying GAN to generating sequences has two problems:
+1. GAN is designed for generating real-valued, continuous data but has difﬁculties in directly generating sequences of discrete tokens, such as texts.
+2. GAN can only give the score/loss for an entire sequence when it has been generated. for a partially generated sequence, it is non-trivial to balance how good as it is now and the future score as the entire sequence.
+
+*Policy gradient: we employ Monte Carlo (MC) search to approximate the state-action value.
+
+*model Gθ to produce a sequence Y1:T = (y1,...,yt,...,yT),yt ∈ Y, where Y is the vocabulary of candidate tokens.
+
+
+● Inferring causation from time series in Earth system sciences
+近年來，計算機科學，物理學，統計學，哲學等領域取得了飛速發展，其應用領域可以從時間序列數據中推斷和量化潛在因果關係，而無需干預系統。
+如果變量是相關的，那麼它們要么是因果關係（沿任一方向），要么是由共同的驅動力驅動的。
+為了估計變量之間的因果關係，不同的方法採用了不同的，部分強有力的假設。
+最近，統計學和機器學習的研究為此目的利用結構因果模型（SCM）的框架。causal inference正在發展成為一種成熟的科學方法。
+
+causal inference方法旨在發現和量化底層系統的因果相互依賴關係。
+
+In Earth system sciences, besides simulation experiments, (Pearson) correlation and regression methods are still the most commonly used tools.如果考慮到潛在的假設和方法論上的挑戰，則causal inference方法確實有可能顯著提高現有技術水平。
+
+我們討論了將因果推論方法應用於其他領域中常見的四個關鍵通用問題的潛力: causal hypothesis testing, causal network analysis, exploratory causal driver detection, and causal evaluation of physical models. (因果假設檢驗，因果網絡分析，探索性因果驅動程序檢測以及物理模型的因果評估。)
+
+1. 在概述各種方法論概念之前，我們提供了一些因果推理方法已經在地球系統科學中產生重要見解的示例。
+2. 我們重點介紹了地球系統科學中的關鍵通用問題，並概述了在因果推理框架內解決這些問題的新方法。
+3. 我們為進一步的方法學研究以及因果推理方法和傳統物理建模可以相互補充的新方法提供了建議，特別是在氣候變化研究方面。
+
+* Example applications of causal inference methods 
+與許多其他領域一樣，基於相關性和單變量回歸的方法仍然是分析地球系統科學中關係的最常用的基於數據的工具。這種關聯方法在日常實踐中很有用，但對構成系統動態的因果機制的見解很少。
+因果推理方法可以克服此類方法的一些關鍵缺點。
+
+1. Walker發現了東西太平洋之間的溫度和壓力關係，從而引起了沃克環流，這不僅已通過觀察研究得以建立，而且已通過詳細的物理模擬實驗得以確立。
+Fig1a. classical correlation, standard bivariate Granger causality (GC), and PCMCI that is better suited to this problem. 儘管GC和標準相關性分析導致了不自然的聯繫，但該示例表明，只要正確應用適當的方法，就可以僅從數據中推斷出沃克環流。
+
+2. Kretschmer等人研究了可能的北極機制，這對於理解歐亞大陸和北美洲北半球中緯度極端冬季可能至關重要。與熱帶氣候模式相比，北極遙距模式的了解要少得多，並且數據驅動的因果關係分析尤其重要，因為不同的氣候模型在一定程度上會產生衝突結果。
+Fig1b. 從觀測數據中提取平流層極地渦旋的北極遙相關路徑，證實了以前的模型模擬研究，發現秋季北極海冰範圍是中緯度冬季循環的重要驅動力。
+
+3. Fig1c. 生態學例子: 傳統回歸分析無法確定加利福尼亞洋流生態系統中沙丁魚，an魚和海面溫度之間的複雜非線性相互作用。這裡的非線性因果狀態空間重構方法提取了潛在的生態學上可能的相互作用網絡，揭示了海面溫度是沙丁魚和an魚豐度的共同驅動因素。
+
+對地球系統數據進行因果推理的挑戰，尤其是系統的時空和非線性性質，與神經科學領域的挑戰更為相似，這將在應用程序和挑戰部分中進一步討論。
+
+* Overview of causal inference methods
+在過去的幾十年中許多著作已經將因果推理和推理作為嚴格的數學框架，從而闡明了從純觀測數據中發現因果圖形模型（也稱為貝葉斯網絡）的所有條件。=> identiﬁability conditions (可識別性條件)
+
+Peters等人總結了在SCM框架中利用對噪聲結構和依賴類型的假設的方法的最新進展。許多因果推斷方法不限於時間序列來推斷因果關係。
+
+- Granger causality
+- Nonlinear state-space methods
+- Causal network learning algorithms
+- Structural causal model framework
+
+
+* Key generic problems in Earth system sciences
+- Causal hypothesis testing
+  a) climate research: 中緯度天氣（包括極端事件）在很大程度上取決於噴射流，風暴軌跡和低頻遙相關之間的非線性動力相互作用。這些動態過程在最新的氣候模型中沒有得到很好的體現。因此，了解天氣決定環流機制的驅動因素和有利的邊界條件對於改善季節性預報，評估氣候模型以及減少區域氣候預測的不確定性至關重要。
+  Fig3a. what drives the strength, position, and shape of the jet stream?是什麼驅動射流的強度，位置和形狀？What is the relative importance of tropical and Arctic processes?熱帶和北極過程的相對重要性是什麼？
+  僅舉幾個代表氣候相關子過程：
+  <1> 需要從典型的網格時空數據集中提取代表氣候相關子過程的時間序列。例如，這可以通過在相應區域進行平均，定義描述射流位置的索引或使用降維方法進行更多數據驅動的方法來實現。
+  <2> 重構這些提取變量之間的因果關係具有挑戰性，因為不同的非線性過程可能在從快速天氣和雲輻射過程到緩慢的海洋過程驅動的多年可變性的不同時間尺度上相互作用。
+  <3> 氣候變量（例如降水）的分佈通常是非高斯的。在神經科學中也需要類似的數據特徵，其中需要重建大腦的第一個不同子過程。例如，從時空腦電圖測量中得到的結果，時間序列反映了以不同頻率運行的多個過程。
+
+- Causal complex network analysis
+  a) El Niño 之類的現象是由熱帶太平洋多個過程之間複雜的相互作用造成的，並且對全球氣候系統產生了巨大影響。
+  b) nodes are deﬁned as the time series at different grid locations and links are typically based on correlations between the grid point time series.
+  Fig3b. 挑戰在於高維非線性時空數據，這裡還包括對network measures的適當定義，其中應考慮causal interactions作用並考慮節點的空間定義。
+  c) Causal network comparison metrics can then be utilized for a causal evaluation of physical models
+
+- Exploratory detection of causes of extreme impacts
+  a) 在地球系統以及許多其他復雜系統中，最具有破壞性的影響通常與多種，複合或協同驅動因素有關。例如，毀滅性的野火需要乾燥和炎熱的條件，可用的燃料和點火源。許多影響與閾值行為有關，並且多個驅動因素導致系統崩潰。
+  Fig3c. only the synergistic combination of extreme inland precipitation and extreme storm surge leads to coastal ﬂoods.(只有極端內陸降水和極端風暴潮的協同作用才導致沿海洪水)
+  b) Causal inference方法有助於從可能與影響相關的通常大量潛在驅動因素中識別相關驅動因素。
+  c) 因果方法還使我們能夠確定功能關係中的製度轉移，eg. 它們是由極端條件觸發的。
+  d) 這裡面臨的挑戰包括高維度，協同效應，以及觀察到的影響的樣本量通常很小，並且在諸如神經科學等其他領域也同樣重要。
+
+- Causal evaluation of physical models
+  a) 在地球系統科學的許多學科中，系統或子系統的模型在理解相關過程中起著基本作用。在解決哪些子流程以及使用的參數化類型方面，模型有所不同。例如，生物地球化學模型有助於理解元素循環，並且是耦合地球系統中碳氣候反饋的重要基礎。
+  b) 在更高的層次上，氣候模型模擬了大氣，水體，陸地表面和冰凍圈的相互作用。
+  c) A key task is to evaluate which model better simulates the real system.目前，此類評估基於簡單的描述性統計數據，例如均值和方差，氣候以及模型輸出和觀測值的光譜特性。
+  Fig3d.  the global distribution of gross primary production (GPP): 該模型可能無法很好地模擬影響GPP的物理機制，因為即使有錯誤，多個模型公式和參數化也可以很好地擬合觀察結果，這就是不確定性或均衡性。作為補充標準，我們建議比較模型和觀測數據的重構因果關係。
+  d) 基本前提是，因果相關性與物理過程更直接相關，因此，與簡單的統計數據相比，因果相關性更能抵禦過度擬合，因此，因果類似於觀測值的模型也將產生更可靠的未來預測。如同前面的示例，這裡的挑戰還在於從often noisy station-based measurements或high-dimensional spatiotemporal ﬁelds中提取合適的因果變量，以及過程可以非線性交互涉及不同時空尺度的事實。
+  e)  suitable evaluation and comparison statistics based on causal networks need to be deﬁned (see causal complex network analysis). 在地球系統科學中，模型評估可以幫助建立更切合實際的模型以改善對未來的預測，這與政策制定高度相關
+
+
+
+* Challenges from a methodological perspective
+
+
+
+
+
+
+
+
+
+
+
+

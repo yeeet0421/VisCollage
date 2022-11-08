@@ -224,6 +224,8 @@ const Q_Group = {
                     'Vaccinated': ['people_vaccinated','people_fully_vaccinated', 'people'],
                     'Epidemic_Density': ['total_vaccinations_per_hundred', 'total_deaths_per_million', 'total_cases_per_million', 'percent']},
     'Netflix':     {'Records': ['video_count']},
+    // temporary example
+    'covid':       {'Epidemic': ['Confirmed','Deaths','Recovered']}
 }
 
 //// Transition ////
@@ -243,7 +245,10 @@ const headline_text = {
     'YT': {'text': "Youtube data in the world",
            'source_date': "The data source comes from 2019"},
     'Netflix': {'text': "Netflix data in the world",
-                'source_date': "The movies or tv shows added from 2015 to 2021"}
+                'source_date': "The movies or tv shows added from 2015 to 2021"},
+    // temporary example
+    'covid': {'text': 'covid example headline text',
+              'source_date': 'covid data from 2020_01 to 2021_04'}
 }
 
 //// map region count ////
@@ -288,4 +293,8 @@ const Q_icon_path = {
     'total_cases_per_million': "icons/covid_percentage.png",
 
     'video_count': "icons/video.png",
+
+    // temporary example
+    'Confirmed': "icons/like.png",
+    'Deaths': "icons/view.png"
 }

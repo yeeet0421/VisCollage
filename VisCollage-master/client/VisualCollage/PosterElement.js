@@ -163,7 +163,9 @@ function HeadlineDiv(poster_num){
     var tmp = ""
     var p1 = document.createElement("div");
     setAttributes(p1, {id:"headline_title", contenteditable:"true"});
+    // console.log("all_user_captions", all_user_captions,"poster_num", poster_num,"all_user_captions[poster_num]", all_user_captions[poster_num], "all_user_captions[poster_num].headline", all_user_captions[poster_num].headline, "all_user_captions[poster_num].headline.text",all_user_captions[poster_num].headline.text)
     tmp = all_user_captions[poster_num].headline.text;
+    // console.log('headline_text',headline_text,'curr_dataset',curr_dataset,'headline_text[curr_dataset]', headline_text[curr_dataset])
     p1.innerHTML = (tmp=="")? headline_text[curr_dataset].text : tmp;
     var p2 = document.createElement("div");
     setAttributes(p2, {id:"headline_source", contenteditable:"true"});
@@ -372,6 +374,7 @@ function overAllFacts(poster_num, main_chart_data, div_name){
         }
         
         var img = document.createElement('img');
+        console.log('seems to be? ',main_chart_data.y[i].split("(")[0])
         setAttributes(img, {src: Q_icon_path[main_chart_data.y[i].split("(")[0]],
                             onmouseover:"hoverImg(this);", onmouseout:"unhoverImg(this);"});
 
@@ -745,7 +748,7 @@ function EditPosterLayout(layout_num){
             poster_view.appendChild(leave_div);
 
     }
-    
+    console.log("poster_num: ",poster_num, " Global_InfoGroup: ", Global_InfoGroup, " Global_InfoGroup[poster_num]: ", Global_InfoGroup[poster_num], " Global_InfoGroup[poster_num].theme[0]: ",Global_InfoGroup[poster_num].theme[0], " Global_InfoGroup[poster_num].theme[0].info: ", Global_InfoGroup[poster_num].theme[0].info)
     generateNewPoster(poster_num, Global_InfoGroup[poster_num].theme[0].info);
 }
 

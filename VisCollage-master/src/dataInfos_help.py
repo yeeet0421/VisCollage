@@ -142,7 +142,32 @@ dataInfos = {
         'ID_col': 'show_id',
         'x_default': 'Type',
         'y_default': 'video_count',
-    }
+    },
+    'covid': {
+        # 'readFilePath' : '../data/Transaction/transaction_CH.json', # Chinese
+        # 'readFilePath': '../data/Transaction/transaction_EN.json',  # English
+        'readFilePath': '../data/covid/covid.json',  # English
+        'data': {},
+        'enumerateVizs': [],
+        'rootVizs': [],
+        'colFeatures': defaultdict(lambda: set()),
+        'encoding2Type': defaultdict(lambda: dict()),
+        'expand2Type': dict(),
+        'quantitative':  {'Confirmed', 'Deaths', 'Recovered'},
+        'nominal': {'Country/Region', 'Province/State'},
+        'temporal': {'Day', 'Month', 'Weekday', 'Year'},
+        'hierarchy': {
+            'Province/State': {'Country/Region': 'drill_down'},
+            'Country/Region': {'Province/State': 'roll_up'},
+            'Day': {'Month': 'roll_up'},
+            'Weekday': {'Month': 'roll_up'},
+            'Month': {'Year': 'roll_up', 'Day': 'drill_down', 'Weekday': 'drilldown'},
+            'Year': {'Month': 'drill_down'}
+        },
+        'ID_col': 'SNo',
+        'x_default': 'Year',
+        'y_default': 'Confirmed',
+    },
 }
 
 ################## VisGuide 2.0 ######################

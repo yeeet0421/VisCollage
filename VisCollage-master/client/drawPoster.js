@@ -110,10 +110,10 @@ function clearPosterView(poster_num){
 }
 
 function saveSVGFeatures(poster_num, canvas_info, weight, lineStartDiv, drawLeave){
-    //console.log(poster_num, canvas_info)
+    // console.log('poster_num',poster_num, canvas_info)
     data = {'canvas': canvas_info, 'weight':weight}
     annoBox_infos[poster_num] = {'canvas': canvas_info, 'weight':weight, 'lineStartDiv':lineStartDiv};
-
+    
     // save svg features
     if(drawLeave == true){
         $.ajax({
@@ -121,10 +121,11 @@ function saveSVGFeatures(poster_num, canvas_info, weight, lineStartDiv, drawLeav
             url:"http://127.0.0.1:5000/save_svgfeatures",
             data:JSON.stringify(data)
         }).done(function(responce){
+            // console.log('scaleMain')
             scaleMain(responce[0], poster_num)
-            
+            // console.log('moveLeafChart')
             moveLeafChart(poster_num, canvas_info, responce[1], responce[0])
-            console.log("Save SVG Features");
+            // console.log("Save SVG Features");
             if(document.getElementById('list_topics_'+poster_num).childElementCount < Global_InfoGroup[poster_num].total_clusters.length){
                 tmp_screenshot(poster_num)
             }

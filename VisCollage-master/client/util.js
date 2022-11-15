@@ -152,7 +152,8 @@ const FONT = "Lato,'Helvetica Neue',Arial,Helvetica,sans-serif";
 const month_abbrev = ["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
 const TR_userlevel = {"A":"LevelA","B":"LevelB","C":"LevelC"}
 const TR_labels = {
-    'invoice_price':"Revenue",
+    // 'invoice_price':"Revenue",
+    'revenue':"Revenue",
     'points_gained':"PointsGained",
     'branch_name':"Branch",
     'category':"Category",

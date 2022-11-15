@@ -35,14 +35,15 @@ dataInfos = {
     'Transaction': {
         # 'readFilePath' : '../data/Transaction/transaction_CH.json', # Chinese
         # 'readFilePath': '../data/Transaction/transaction_EN.json',  # English
-        'readFilePath': '../data/Transaction/transaction_EN_level_changed.json',  # English
+        'readFilePath': '../data/Transaction/transaction_EN_level_invoicePrice_changed.json',  # English
         'data': {},
         'enumerateVizs': [],
         'rootVizs': [],
         'colFeatures': defaultdict(lambda: set()),
         'encoding2Type': defaultdict(lambda: dict()),
         'expand2Type': dict(),
-        'quantitative':  {'invoice_price', 'points_gained'},
+        # 'quantitative':  {'invoice_price', 'points_gained'},
+        'quantitative':  {'revenue', 'points_gained'},
         'nominal': {'branch_name', 'category', 'user_level', 'address_code', 'gender', 'is_taiwan'},
         'temporal': {'invoice_month', 'invoice_day', 'invoice_weekday'},
         'hierarchy': {
@@ -54,7 +55,8 @@ dataInfos = {
         },
         'ID_col': 'transaction_id',
         'x_default': 'invoice_month',
-        'y_default': 'invoice_price',
+        # 'y_default': 'invoice_price',
+        'y_default': 'revenue',
     },
     'YT': {
         'readFilePath': '../data/YT/USvideos.json',

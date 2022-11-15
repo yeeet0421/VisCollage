@@ -96,6 +96,7 @@ def setVisFeature(curr_vis, isRoot=False):
 
 
 def insightSig(curr_vis):
+    # print(curr_vis.insights)
     sigs = [insight['sig'] for insight in curr_vis.insights]
     return 1-min(sigs)
 

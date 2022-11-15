@@ -131,6 +131,9 @@ function scaleMain(rate, poster_num){
 function zoomMain(in_or_out){
     var zoom_scale = [1, 0.95, 0.9, 0.85, 0.8];
     var zoom_div = $('#main_chart_div_'+curr_poster_num+' > #zoom_icon');
+    // console.log("+++++++++++++++")
+    // console.log(zoom_div.data())
+    // console.log("+++++++++++++++")
     var now_zoom = zoom_div.data('value');
     var scale_id = zoom_scale.indexOf(now_zoom)
     if(in_or_out === 1){ // zoom in

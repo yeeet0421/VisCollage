@@ -589,8 +589,8 @@ def save_svgfeatures():
     print("---server/save_svgfeatures")
     if request.method == 'POST':
         get_data = json.loads(request.get_data())
-        # with open('canvas.json', 'w') as f:
-        #    json.dump(get_data['canvas'], f)
+        with open('canvas.json', 'w', encoding='utf-8') as f:
+            json.dump(get_data["canvas"], f, ensure_ascii=False, indent=4)
 
     data = tool.optimal_scale_placement(get_data['canvas'], get_data['weight'])
     rst = jsonify(data)

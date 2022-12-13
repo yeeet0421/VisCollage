@@ -15,9 +15,9 @@ function drawCollage(tree_structure,chart_datas){
         return (b.depth - a.depth);
     })
     var infoGroup = generateLayer(max_depth, clusters);
-
-    //console.log(infoGroup);
-
+    // console.log("+++++++++++++++")
+    // console.log("infoGroup: ", infoGroup)
+    // console.log("+++++++++++++++")
     anychart.onDocumentReady(function () {
         console.log("drawCollage");
 
@@ -265,6 +265,9 @@ function generateCluster(tree_structure, max_depth){
             var push = false;
             var q_group = getKeyByValueinArray(Q_Group[curr_dataset], value.y.split("(")[0]);
             var tmp_pattern = [Object.keys(value.filters).length, value.x, q_group, value.type, Object.keys(value.filters).join('_')];
+            // console.log("++++++++++++")
+            // console.log(tmp_pattern)
+            // console.log("++++++++++++++++++")
             if(Object.keys(value.filters).includes("Continent") && (value.x=="Country" || Object.keys(value.filters).includes("Country"))){
                 tmp_pattern.push(value.filters.Continent[0]);
             }
@@ -335,6 +338,7 @@ function generateLayer(max_depth, clusters){
                     main_c = clusters[main_c_id];
                     if(main_c){
                         main_c.charts.forEach(function(cpc){
+                            console.log(cpc)
                             info_group[l].main.push(cpc);
                             max_depth_id = findIndexOfArrayObj(max_depth, ['chart'], [cpc]);
                             if(max_depth_id > -1) max_depth[max_depth_id].used = true;
@@ -401,7 +405,7 @@ function FindAllTheme(){
                     }
                 });
                 info_group.leaves = [...new Set(info_group.leaves)];
-                //console.log(info_group.leaves);
+                // console.log(info_group.leaves);
                 // find parent
                 parent_c = main_c;
                 while(!parent_c.chart_parent.includes(undefined)){
@@ -420,7 +424,8 @@ function FindAllTheme(){
             }
         })
     }
-    //console.log(Global_InfoGroup)
+
+    // console.log(Global_InfoGroup)
 }
 
 function drawMajorPlot(stage, poster_num, mainChart, focusDataPoint, drawLeave=true){

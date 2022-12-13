@@ -377,7 +377,7 @@ function overAllFacts(poster_num, main_chart_data, div_name){
         }
         
         var img = document.createElement('img');
-        console.log('seems to be? ',main_chart_data.y[i].split("(")[0])
+        // console.log('seems to be? ',main_chart_data.y[i].split("(")[0])
         setAttributes(img, {src: Q_icon_path[main_chart_data.y[i].split("(")[0]],
                             onmouseover:"hoverImg(this);", onmouseout:"unhoverImg(this);"});
 

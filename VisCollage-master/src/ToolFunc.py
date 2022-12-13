@@ -17,6 +17,7 @@ from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 from shapely.geometry import Polygon
 from scipy.optimize import dual_annealing
 from scipy.optimize import basinhopping
+import copy
 
 # load data
 curr_data = ""
@@ -637,7 +638,38 @@ def getWorldCountry(flag):
         world_country = readFile(mapInfos["Continent"]["continentsFilePath"])
     return world_country
 
+def optimal_scale_placement(canvas_info, weight):
+    save_info_scale = {}
 
+    # initial state 0.9, give bound of 0.8, 1.0 and find global minimum in bound
+    x0 = [0.9]
+    minimizer_kwargs = dict(
+        method="L-BFGS-B",
+        bounds=[(0.8, 1.0)],
+        tol=1e-3,
+        args=(weight, canvas_info, save_info_scale),
+    )
+    
+    # basin hopping: Find the global minimum of a objective function using the basin-hopping algorithm.
+    result = basinhopping(
+        scale_objective,
+        x0,
+        minimizer_kwargs=minimizer_kwargs,
+        stepsize=0.25,
+        niter=20,
+        niter_success=2,
+    )
+    print("global minimum: x = %.4f, f(x) = %.4f" % (result.x, result.fun))
+    # return best_scale, best_scale_pos
+    # print("++++++++++++", save_info_scale["scale_"+str(result.x[0])])
+    # with open("info_scale.json", "w", encoding="utf-8") as f:
+    #     json.dump(save_info_scale, f, ensure_ascii=False, indent=4)
+    result.x[0] = int(result.x[0])
+    print(type(result.x[0]), type(save_info_scale["scale_" + str(result.x[0])]["center"]))
+    return result.x[0], save_info_scale["scale_" + str(result.x[0])]["center"]
+
+
+'''
 def optimal_scale_placement(canvas_info, weight):
     save_info_scale = {}
     scale_hyperparam = [1, 0.95, 0.9, 0.85, 0.8]
@@ -676,66 +708,46 @@ def optimal_scale_placement(canvas_info, weight):
     #    json.dump(save_info_scale, f)
 
     return best_scale, best_scale_pos
-
-    # def scale_objective(scale, weight, canvas_info, save_info_scale, origin_info):
-    #     print("++++++++", scale)
-    #     scaling = scale[0]
-    #     info_scale = scaleRegions(
-    #         canvas_info["width"], canvas_info["height"], origin_info, scaling
-    #     )
-    #     save_info_scale["scale_" + str(scaling)] = {"info": info_scale}
-
-    #     # MIN_C, MIN_SCORE = find_leaf_placement(info_scale, weight)
-    #     MIN_C, MIN_SCORE = optimization(info_scale, weight)
-    #     min_score = sum(MIN_SCORE)
-    #     # for multiple insights, put it to the "smallest penalty" insight
-    #     # min_c = MIN_C[np.argmin(MIN_SCORE)]
-    #     save_info_scale["scale_" + str(scaling)]["center"] = MIN_C
-    #     save_info_scale["scale_" + str(scaling)]["score"] = MIN_SCORE
-    #     return min_score
-
-    # def optimal_scale_placement(canvas_info, weight):
-    save_info_scale = {}
-
+'''
+def scale_objective(scale, weight, canvas_info, save_info_scale):
     origin_info = {
         "shape_regions": [],
         "alpha_regions": [],
-        "insights": canvas_info["insights"],
+        "insights": copy.deepcopy(canvas_info["insights"]),
     }
 
     for i in range(0, len(canvas_info["regions"])):
-        origin_info["shape_regions"].append(canvas_info["regions"][i]["points"])
-        origin_info["alpha_regions"].append(canvas_info["regions"][i]["alpha"])
-    # initial state 0.9, give bound of 0.8, 1.0 and find global minimum in bound
-    x0 = [0.9]
-    minimizer_kwargs = dict(
-        method="L-BFGS-B",
-        bounds=[(0.8, 1.0)],
-        tol=1e-3,
-        args=(weight, canvas_info, save_info_scale, origin_info),
+        origin_info["shape_regions"].append(copy.deepcopy(canvas_info["regions"][i]["points"]))
+        origin_info["alpha_regions"].append(copy.deepcopy(canvas_info["regions"][i]["alpha"]))
+    print("++++++++", scale)
+    scaling = scale[0]
+    info_scale = scaleRegions(
+        canvas_info["width"], canvas_info["height"], origin_info, scaling
     )
-    # basin hopping: Find the global minimum of a objective function using the basin-hopping algorithm.
-    result = basinhopping(
-        scale_objective,
-        x0,
-        minimizer_kwargs=minimizer_kwargs,
-        niter=20,
-        niter_success=2,
+    save_info_scale["scale_" + str(scaling)] = {"info": info_scale}
+    save_info_scale["scale_" + str(scaling)]["penalty"] = {}
+    # MIN_C, MIN_SCORE = find_leaf_placement(info_scale, weight)
+    MIN_C, MIN_SCORE = optimization(
+        info_scale, weight, save_info_scale["scale_" + str(scaling)]["penalty"]
     )
-
-    print("global minimum: x = %.4f, f(x) = %.4f" % (result.x, result.fun))
-    print("centers at ", save_info_scale["scale_" + str(result.x[0])]["center"])
-    # return best_scale, best_scale_pos
-    return result.x[0], save_info_scale["scale_" + str(result.x[0])]["center"]
-
+    min_score = sum(MIN_SCORE)
+    print("score: ", sum(MIN_SCORE))
+    # for multiple insights, put it to the "smallest penalty" insight
+    # min_c = MIN_C[np.argmin(MIN_SCORE)]
+    save_info_scale["scale_" + str(scaling)]["center"] = MIN_C
+    save_info_scale["scale_" + str(scaling)]["score"] = MIN_SCORE
+    # draw["all"].append(sum(MIN_SCORE))
+    # draw["scale"].append(scaling)
+    # draw["place"].append(MIN_C)
+    return min_score
 
 def scaleRegions(W, H, origin_info, scaling):
 
     info_scale = {"width": W, "height": H, "regions": [], "insights": []}
 
     for r in range(0, len(origin_info["shape_regions"])):
-        points = origin_info["shape_regions"][r]
-        alpha = origin_info["alpha_regions"][r]
+        points = copy.deepcopy(origin_info["shape_regions"][r])
+        alpha = copy.deepcopy(origin_info["alpha_regions"][r])
         points[0] = round((points[0] - W / 2) * scaling + W / 2, 2)
         points[1] = round((points[1] - H / 2) * scaling + H / 2, 2)
         points[2] = round(points[2] * scaling, 2)
@@ -743,7 +755,7 @@ def scaleRegions(W, H, origin_info, scaling):
         info_scale["regions"].append({"points": points, "alpha": alpha})
 
     for p in range(0, len(origin_info["insights"])):
-        scale_insight = origin_info["insights"][p]
+        scale_insight = copy.deepcopy(origin_info["insights"][p])
         scale_insight[0] = round((scale_insight[0] - W / 2) * scaling + W / 2, 2)
         scale_insight[1] = round((scale_insight[1] - H / 2) * scaling + H / 2, 2)
         info_scale["insights"].append(scale_insight)
@@ -873,6 +885,8 @@ def AABBArea(A, B, pt, ln):
 
 def Distance(A, Target):
     return pow(pow(A["x"] - Target[0], 2) + pow(A["y"] - Target[1], 2), 1 / 2)
+    # # changed to ^2 to see if anything changed
+    # return pow(A["x"] - Target[0], 2) + pow(A["y"] - Target[1], 2)
 
 
 # objective function
@@ -882,10 +896,12 @@ def objective(v, polys, Target, BBOX_SIZE):
     x, y = v
     AnnoBox = {"x": x, "y": y, "w": BBOX_SIZE[0], "h": BBOX_SIZE[1]}
     return 0.6 * AABBCollision(AnnoBox, polys) + 0.4 * Distance(AnnoBox, Target)
+    # + y**3
     # return (x**2 + y - 11)**2 + (x + y**2 -7)**2
 
 
-def optimization(info, weight, penalty_record, draw):
+"""
+def optimization(info, weight):
     # print("=====================", info, "+++++++++++++++++++++++++")
     BBOX_SIZE = (150, 300)
     polys = info["regions"]
@@ -923,12 +939,75 @@ def optimization(info, weight, penalty_record, draw):
             "Dis:",
             Distance(AnnoBox, TARGET_C[t]) * 0.4,
         )
+        # penalty_record[t] = {}
+        # penalty_record[t]["AABB"] = AABBCollision(AnnoBox, polys) * 0.6
+        # draw["AABB"].append(AABBCollision(AnnoBox, polys) * 0.6)
+        # penalty_record[t]["dis"] = Distance(AnnoBox, TARGET_C[t]) * 0.4
+        # draw["Distance"].append(Distance(AnnoBox, TARGET_C[t]) * 0.4)
+        solution_c = (solution[0] + BBOX_SIZE[0] / 2, solution[1] + BBOX_SIZE[1] / 2)
+
+        MIN_C.append(solution_c)
+        MIN_SCORE.append(evaluation)
+        polys.append(
+            {
+                "points": [solution[0], solution[1], BBOX_SIZE[0], BBOX_SIZE[1]],
+                "alpha": weight,
+            }
+        )
+    # print("=====================", MIN_C, MIN_SCORE, "+++++++++++++++++++++++++")
+    return MIN_C, MIN_SCORE
+
+
+"""
+
+def optimization(info, weight, penalty_record):
+    # print("=====================", info, "+++++++++++++++++++++++++")
+    BBOX_SIZE = (150, 300)
+    polys = copy.deepcopy(info["regions"])
+    TARGET_C = copy.deepcopy(info["insights"])
+    MIN_C, MIN_SCORE = [], []
+    for t in range(0, len(TARGET_C)):
+        # define the bounds on the search
+        bounds = [[0, info["width"] - BBOX_SIZE[0]], [0, info["height"] - BBOX_SIZE[1]]]
+        # perform the simulated annealing search
+        # x0 = [TARGET_C[t][0], TARGET_C[t][1]]
+        x0 = np.asarray([0, 0])
+        
+        result = dual_annealing(
+            # objective, bounds, x0=x0, args=(polys, TARGET_C[t], BBOX_SIZE)
+            objective,
+            bounds,
+            x0=x0,
+            args=(polys, TARGET_C[t], BBOX_SIZE),
+        )
+        
+        # print("=====================", result, "+++++++++++++++++++++++++")
+        # # summarize the result
+        # print("Status : %s" % result["message"])
+        # print("Total Evaluations: %d" % result["nfev"])
+        # evaluate solution
+        solution = list(result["x"])
+        evaluation = objective(solution, polys, TARGET_C[t], BBOX_SIZE)
+        print("Solution: f(%s) = %.5f" % (solution, evaluation))
+        AnnoBox = {
+            "x": solution[0],
+            "y": solution[1],
+            "w": BBOX_SIZE[0],
+            "h": BBOX_SIZE[1],
+        }
+        print(
+            "AABB: ",
+            AABBCollision(AnnoBox, polys) * 0.6,
+            "Dis:",
+            Distance(AnnoBox, TARGET_C[t]) * 0.4,
+        )
         penalty_record[t] = {}
         penalty_record[t]["AABB"] = AABBCollision(AnnoBox, polys) * 0.6
-        draw["AABB"].append(AABBCollision(AnnoBox, polys) * 0.6)
+        # draw["AABB"].append(AABBCollision(AnnoBox, polys) * 0.6)
         penalty_record[t]["dis"] = Distance(AnnoBox, TARGET_C[t]) * 0.4
-        draw["Distance"].append(Distance(AnnoBox, TARGET_C[t]) * 0.4)
-        solution_c = (solution[0] + BBOX_SIZE[0] / 2, solution[1] + BBOX_SIZE[1] / 2)
+        # draw["Distance"].append(Distance(AnnoBox, TARGET_C[t]) * 0.4)
+        # solution_c = (solution[0] + BBOX_SIZE[0] / 2, solution[1] + BBOX_SIZE[1] / 2)
+        solution_c = (solution[0], solution[1])
 
         MIN_C.append(solution_c)
         MIN_SCORE.append(evaluation)

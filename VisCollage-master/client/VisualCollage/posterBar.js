@@ -134,6 +134,7 @@ function AnyChartBarBBox(poster_num, datas, insight_id, startXY){
       if(g[i].childElementCount>=datas.length && gCount<insight_id.length){
         for(var c=0; c<datas.length;c++){
           var bbox = g[i].children[c].getBBox();
+          console.log(bbox)
           ////!!!!!! why bbox.height == 0? animation doesn't finish ////
           var find = findIndexOfArrayObj(insight_id, ['nChart','dPoint'], [gCount, c]);
           if(find >= 0){

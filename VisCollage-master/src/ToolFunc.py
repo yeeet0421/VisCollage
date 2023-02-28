@@ -639,6 +639,9 @@ def getWorldCountry(flag):
     return world_country
 
 def optimal_scale_placement(canvas_info, weight):
+    print("optimal scale placement")
+    print(canvas_info)
+    # print(weight)
     save_info_scale = {}
 
     # initial state 0.9, give bound of 0.8, 1.0 and find global minimum in bound
@@ -659,13 +662,17 @@ def optimal_scale_placement(canvas_info, weight):
         niter=20,
         niter_success=2,
     )
-    print("global minimum: x = %.4f, f(x) = %.4f" % (result.x, result.fun))
+    # print("global minimum: x = %.4f, f(x) = %.4f" % (result.x, result.fun))
+    print("global minimum: x = %f, f(x) = %f" % (result.x, result.fun))
     # return best_scale, best_scale_pos
-    # print("++++++++++++", save_info_scale["scale_"+str(result.x[0])])
+    print("++++++++++++", save_info_scale)
     # with open("info_scale.json", "w", encoding="utf-8") as f:
     #     json.dump(save_info_scale, f, ensure_ascii=False, indent=4)
-    result.x[0] = int(result.x[0])
-    print(type(result.x[0]), type(save_info_scale["scale_" + str(result.x[0])]["center"]))
+    # try it 12/14/2022
+    # result.x[0] = int(result.x[0])
+    print(result.x)
+    print("type(result.x): ", type(result.x))
+    print("type: ", type(save_info_scale["scale_" + str(result.x[0])]["center"]))
     return result.x[0], save_info_scale["scale_" + str(result.x[0])]["center"]
 
 
@@ -719,7 +726,7 @@ def scale_objective(scale, weight, canvas_info, save_info_scale):
     for i in range(0, len(canvas_info["regions"])):
         origin_info["shape_regions"].append(copy.deepcopy(canvas_info["regions"][i]["points"]))
         origin_info["alpha_regions"].append(copy.deepcopy(canvas_info["regions"][i]["alpha"]))
-    print("++++++++", scale)
+    print("++++++++", str(scale[0]))
     scaling = scale[0]
     info_scale = scaleRegions(
         canvas_info["width"], canvas_info["height"], origin_info, scaling
@@ -988,7 +995,8 @@ def optimization(info, weight, penalty_record):
         # evaluate solution
         solution = list(result["x"])
         evaluation = objective(solution, polys, TARGET_C[t], BBOX_SIZE)
-        print("Solution: f(%s) = %.5f" % (solution, evaluation))
+        # print("Solution: f(%s) = %.5f" % (solution, evaluation))
+        print("Solution: f(%s) = %f" % (solution, evaluation))
         AnnoBox = {
             "x": solution[0],
             "y": solution[1],

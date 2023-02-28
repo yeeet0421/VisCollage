@@ -276,6 +276,7 @@ const Q_icon_path = {
     'O3': "icons/O3.png",
 
     'invoice_price': "icons/revenue.png",
+    'revenue': "icons/revenue.png",
     'points_gained': "icons/token.png",
     'percentage of count': "icons/percentage.png",
 

@@ -20,7 +20,6 @@ init = True  # 是否為新user
 
 # set init vis feature
 for dataName, dataInfo in dataInfos.items():
-    # print(len(dataInfo['enumerateVizs']))
     for vis in dataInfo['enumerateVizs']:
         # print(vis.x,vis.y)
         tool.curr_data = dataName

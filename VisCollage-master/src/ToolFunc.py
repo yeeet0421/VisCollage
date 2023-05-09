@@ -19,11 +19,19 @@ from scipy.optimize import dual_annealing
 from scipy.optimize import basinhopping
 import copy
 
+# an attempt to read files through input
+import sys
+
 # load data
 curr_data = ""
 dataInfos_path = "dataInfos"  # pre stored visualizations
 Vis_index_path = "vis_index"
-dataInfos = dataInfos_help.dataInfos
+dataInfos = dataInfos_help.dataInfos 
+
+# #an attempt to read files through input
+# curr_data = sys.argv[1]
+# sys.path.append('../data/'+sys.argv[1])
+# from config import dataInfos
 
 ############### VisGuide 2.0 ################
 mapInfos = dataInfos_help.mapInfos
@@ -304,6 +312,9 @@ def enumerateVis(dataInfo, dataName="AQ"):  # based on DeepEye P.8  # y不能是
 
 def columnEncoding(column):
     columns = list(dataInfos[curr_data]["colFeatures"].keys())
+
+    # # an attempt to read files through input
+    # columns = list(dataInfos["colFeatures"].keys())
     return columns.index(column)
 
 
@@ -443,6 +454,9 @@ class Vis:
             else defaultdict(lambda: defaultdict())
         )
         data = dataInfos[curr_data]["data"]
+        
+        # # an attempt to read files through input
+        # data = dataInfos["data"]
 
         if not self.pre_vis:  # 沒有前人的
             for id, point in data.items():
@@ -495,6 +509,9 @@ class Vis:
 
         # 為了讓 x 軸的排序一樣
         colFeatures = dataInfos[curr_data]["colFeatures"]
+        
+        # # an attempt to read files through input
+        # colFeatures = dataInfos["colFeatures"]
 
         for key in list(colFeatures[self.x]):
             if key in self.points:
@@ -514,6 +531,8 @@ class Vis:
                     newSubgroup[key] = values / total if total != 0 else 0
 
             if self.x in dataInfos[curr_data]["nominal"]:
+            # # an attempt to read files through input
+            # if self.x in dataInfos["nominal"]:
                 subgroup = dict(
                     sorted(newSubgroup.items(), key=lambda x: x[1], reverse=True)
                 )
@@ -574,6 +593,7 @@ class Vis:
 def setDataInfos():
     global dataInfos
     for dataName, dataInfo in dataInfos.items():
+        # print(dataName, dataInfo)
         data_point = readFile(dataInfo["readFilePath"])
         print(len(data_point))
         dataInfo["data"] = {point[dataInfo["ID_col"]]: point for point in data_point}
@@ -584,6 +604,18 @@ def setDataInfos():
         dataInfo["rootVizs"] = [
             vis for vis in dataInfo["enumerateVizs"] if len(vis.filter) == 0
         ]
+    # # an attempt to read files through input
+    # data_point = readFile(dataInfos["readFilePath"])
+    # print(len(data_point))
+    # dataInfos["data"] = {point[dataInfos["ID_col"]]: point for point in data_point}
+    # dataInfos["colFeatures"] = getColFeatures(sys.argv[1], dataInfos)
+    # dataInfos["encoding2Type"] = getEncoding2Type(dataInfos, sys.argv[1])
+    # dataInfos["expand2Type"] = getExpand2Type()
+    # dataInfos["enumerateVizs"] = enumerateVis(dataInfos, sys.argv[1])
+    # dataInfos["rootVizs"] = [
+    #     vis for vis in dataInfos["enumerateVizs"] if len(vis.filter) == 0
+    # ]
+
 
     print("setDataInfos Done")
 
@@ -602,7 +634,8 @@ def init(data=None):
             dataInfos = read_dill(dataInfos_path)  # 直接讀取前處理好的dataInfos
             Vis.index = read_dill(Vis_index_path)
 
-        except IOError:
+        # except IOError:
+        except (IOError, OSError):
             setDataInfos()
     else:
         setDataInfos()

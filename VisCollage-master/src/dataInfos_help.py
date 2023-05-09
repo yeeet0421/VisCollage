@@ -165,31 +165,55 @@ dataInfos = {
         "x_default": "Type",
         "y_default": "video_count",
     },
-    "covid": {
-        # 'readFilePath' : '../data/Transaction/transaction_CH.json', # Chinese
-        # 'readFilePath': '../data/Transaction/transaction_EN.json',  # English
-        "readFilePath": "../data/covid/covid.json",  # English
+    # "covid": {
+    #     # 'readFilePath' : '../data/Transaction/transaction_CH.json', # Chinese
+    #     # 'readFilePath': '../data/Transaction/transaction_EN.json',  # English
+    #     "readFilePath": "../data/covid/covid.json",  # English
+    #     "data": {},
+    #     "enumerateVizs": [],
+    #     "rootVizs": [],
+    #     "colFeatures": defaultdict(lambda: set()),
+    #     "encoding2Type": defaultdict(lambda: dict()),
+    #     "expand2Type": dict(),
+    #     "quantitative": {"Confirmed", "Deaths", "Recovered"},
+    #     "nominal": {"Country/Region", "Province/State"},
+    #     "temporal": {"Day", "Month", "Weekday", "Year"},
+    #     "hierarchy": {
+    #         "Province/State": {"Country/Region": "drill_down"},
+    #         "Country/Region": {"Province/State": "roll_up"},
+    #         "Day": {"Month": "roll_up"},
+    #         "Weekday": {"Month": "roll_up"},
+    #         "Month": {"Year": "roll_up", "Day": "drill_down", "Weekday": "drilldown"},
+    #         "Year": {"Month": "drill_down"},
+    #     },
+    #     "ID_col": "SNo",
+    #     "x_default": "Year",
+    #     "y_default": "Confirmed",
+    # },
+    "2023":{
+        "readFilePath": "../data/2023/2023.json",  # English
         "data": {},
         "enumerateVizs": [],
         "rootVizs": [],
         "colFeatures": defaultdict(lambda: set()),
         "encoding2Type": defaultdict(lambda: dict()),
         "expand2Type": dict(),
-        "quantitative": {"Confirmed", "Deaths", "Recovered"},
-        "nominal": {"Country/Region", "Province/State"},
-        "temporal": {"Day", "Month", "Weekday", "Year"},
+        "quantitative": {'pm10_avg', 'aqi', 'pm2.5', 'no2', 'nox','so2_avg', 'so2', 'pm2.5_avg', 'co_8hr', 'co', 'no', 'o3', 'o3_8hr','pm10',  'winddirec','windspeed', },
+        "nominal": {"county", 'sitename'},
+        "temporal": {"year", "month", "day", "weekDay"},
         "hierarchy": {
-            "Province/State": {"Country/Region": "drill_down"},
-            "Country/Region": {"Province/State": "roll_up"},
-            "Day": {"Month": "roll_up"},
-            "Weekday": {"Month": "roll_up"},
-            "Month": {"Year": "roll_up", "Day": "drill_down", "Weekday": "drilldown"},
-            "Year": {"Month": "drill_down"},
+            "county": {"sitename": "drill_down"},
+            "sitename": {"county": "roll_up"},
+            "year": {"month": "drill_down"},
+            "month": {"year": "roll_up", "day": "drill_down", "weekDay": "drill_down"},
+            "day": {"month": "roll_up"},
+            "weekDay": {"month": "roll_up"},
         },
-        "ID_col": "SNo",
-        "x_default": "Year",
-        "y_default": "Confirmed",
-    },
+        "ID_col": "id",
+        "x_default": 'year',
+        "y_default": "pm2.5",
+        # {'status', 'latitude',  'unit', 'siteid', 'pollutant', 'longitude' , }
+    }
 }
 
 ################## VisGuide 2.0 ######################

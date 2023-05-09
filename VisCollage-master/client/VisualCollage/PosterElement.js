@@ -168,7 +168,7 @@ function HeadlineDiv(poster_num){
     setAttributes(p1, {id:"headline_title", contenteditable:"true"});
     // console.log("all_user_captions", all_user_captions,"poster_num", poster_num,"all_user_captions[poster_num]", all_user_captions[poster_num], "all_user_captions[poster_num].headline", all_user_captions[poster_num].headline, "all_user_captions[poster_num].headline.text",all_user_captions[poster_num].headline.text)
     tmp = all_user_captions[poster_num].headline.text;
-    // console.log('headline_text',headline_text,'curr_dataset',curr_dataset,'headline_text[curr_dataset]', headline_text[curr_dataset])
+    console.log('headline_text',headline_text,'curr_dataset',curr_dataset,'headline_text[curr_dataset]', headline_text[curr_dataset])
     p1.innerHTML = (tmp=="")? headline_text[curr_dataset].text : tmp;
     var p2 = document.createElement("div");
     setAttributes(p2, {id:"headline_source", contenteditable:"true"});

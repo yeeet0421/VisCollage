@@ -226,7 +226,8 @@ const Q_Group = {
                     'Epidemic_Density': ['total_vaccinations_per_hundred', 'total_deaths_per_million', 'total_cases_per_million', 'percent']},
     'Netflix':     {'Records': ['video_count']},
     // temporary example
-    'covid':       {'Epidemic': ['Confirmed','Deaths','Recovered']}
+    'covid':       {'Epidemic': ['Confirmed','Deaths','Recovered']},
+    '2023':        {'AirQuality': ['pm10_avg', 'aqi', 'pm2.5', 'no2', 'nox','so2_avg', 'so2', 'pm2.5_avg', 'co_8hr', 'co', 'no', 'o3', 'o3_8hr','pm10']}
 }
 
 //// Transition ////
@@ -249,7 +250,9 @@ const headline_text = {
                 'source_date': "The movies or tv shows added from 2015 to 2021"},
     // temporary example
     'covid': {'text': 'covid example headline text',
-              'source_date': 'covid data from 2020_01 to 2021_04'}
+              'source_date': 'covid data from 2020_01 to 2021_04'},
+    '2023': {'text': 'example headline text',
+              'source_date': 'data from 2023_01 to 2023_04'}
 }
 
 //// map region count ////
